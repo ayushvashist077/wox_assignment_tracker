@@ -67,7 +67,7 @@ const AssignmentList = ({
 
   return (
     <div className="assignment-list-container">
-      <AssignmentFilters filters={filters} onFilterChange={handleFilterChange} />
+      <AssignmentFilters filters={filters} onFilterChange={handleFilterChange} isCR={isCR} />
 
       {filteredAssignments.length === 0 ? (
         <div className="no-assignments">

@@ -27,24 +27,24 @@ export const useAssignments = () => {
     fetchAssignments();
   }, [fetchAssignments]);
 
-  const handleAdd = async (assignment, files = null) => {
-    const result = await addAssignment(assignment, files);
+  const handleAdd = async (assignment) => {
+    const result = await addAssignment(assignment);
     if (result.success) {
       await fetchAssignments();
     }
     return result;
   };
 
-  const handleUpdate = async (id, data, newFiles = null) => {
-    const result = await updateAssignment(id, data, newFiles);
+  const handleUpdate = async (id, data) => {
+    const result = await updateAssignment(id, data);
     if (result.success) {
       await fetchAssignments();
     }
     return result;
   };
 
-  const handleDelete = async (id, attachments = []) => {
-    const result = await deleteAssignment(id, attachments);
+  const handleDelete = async (id) => {
+    const result = await deleteAssignment(id);
     if (result.success) {
       await fetchAssignments();
     }

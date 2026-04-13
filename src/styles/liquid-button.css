@@ -1,0 +1,140 @@
+/* ===== LIQUID GLASS BUTTON ===== */
+.liquid-glass-svg {
+  display: none;
+}
+
+.liquid-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 100px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  background: transparent;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+  letter-spacing: 0.01em;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.liquid-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.liquid-btn:hover:not(:disabled) {
+  transform: scale(1.05) translateY(-1px);
+}
+
+.liquid-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* ── Sizes ── */
+.liquid-btn-sm {
+  padding: 8px 18px;
+  font-size: 0.8rem;
+  min-height: 34px;
+}
+
+.liquid-btn-md {
+  padding: 14px 36px;
+  font-size: 1rem;
+}
+
+.liquid-btn-lg {
+  padding: 18px 48px;
+  font-size: 1.125rem;
+}
+
+/* ── Variant base backgrounds ── */
+.liquid-btn-variant-primary   { background: rgba(99, 102, 241, 0.22); }
+.liquid-btn-variant-success   { background: rgba(34, 197, 94, 0.2);   }
+.liquid-btn-variant-danger    { background: rgba(239, 68, 68, 0.22);  }
+.liquid-btn-variant-secondary { background: rgba(100, 116, 139, 0.18);}
+.liquid-btn-variant-outline   { background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(255,255,255,0.15); }
+
+/* ── Variant glow layers ── */
+.liquid-btn-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  z-index: 1;
+}
+
+.liquid-btn-glow-primary {
+  background: linear-gradient(135deg, rgba(139,92,246,0.55) 0%, rgba(99,102,241,0.55) 50%, rgba(167,139,250,0.35) 100%);
+}
+
+.liquid-btn-glow-success {
+  background: linear-gradient(135deg, rgba(74,222,128,0.5) 0%, rgba(34,197,94,0.5) 60%, rgba(16,185,129,0.35) 100%);
+}
+
+.liquid-btn-glow-danger {
+  background: linear-gradient(135deg, rgba(248,113,113,0.55) 0%, rgba(239,68,68,0.55) 60%, rgba(220,38,38,0.4) 100%);
+}
+
+.liquid-btn-glow-secondary {
+  background: linear-gradient(135deg, rgba(148,163,184,0.35) 0%, rgba(100,116,139,0.35) 60%, rgba(71,85,105,0.25) 100%);
+}
+
+.liquid-btn-glow-outline {
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%);
+}
+
+/* ── Glass inner shadow and border (shared) ── */
+.liquid-btn-inner-shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  box-shadow:
+    inset 3px 3px 0.5px -3px rgba(255,255,255,0.9),
+    inset -3px -3px 0.5px -3px rgba(255,255,255,0.85),
+    inset 1px 1px 1px -0.5px rgba(255,255,255,0.6),
+    inset -1px -1px 1px -0.5px rgba(255,255,255,0.6),
+    inset 0 0 8px 4px rgba(255,255,255,0.08),
+    0 0 0 1px rgba(255,255,255,0.14),
+    0 4px 20px rgba(0,0,0,0.25),
+    0 1px 4px rgba(0,0,0,0.15);
+  pointer-events: none;
+  transition: box-shadow 0.3s ease;
+  z-index: 2;
+}
+
+.liquid-btn:hover:not(:disabled) .liquid-btn-inner-shadow {
+  box-shadow:
+    inset 3px 3px 0.5px -3px rgba(255,255,255,0.9),
+    inset -3px -3px 0.5px -3px rgba(255,255,255,0.85),
+    inset 1px 1px 1px -0.5px rgba(255,255,255,0.6),
+    inset -1px -1px 1px -0.5px rgba(255,255,255,0.6),
+    inset 0 0 8px 4px rgba(255,255,255,0.14),
+    0 0 0 1px rgba(255,255,255,0.22),
+    0 8px 28px rgba(0,0,0,0.3),
+    0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ── Backdrop distortion layer ── */
+.liquid-btn-backdrop {
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* ── Text above everything ── */
+.liquid-btn-text {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  white-space: nowrap;
+}

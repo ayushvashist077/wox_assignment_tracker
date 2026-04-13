@@ -4,6 +4,7 @@ import {
   signOut,
   updateProfile,
   sendEmailVerification,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "./firebase";
 import { getCREmails } from "./adminService";
@@ -52,6 +53,30 @@ export const reloadUser = async () => {
     return { success: false };
   } catch (error) {
     return { success: false, error: error.message };
+  }
+};
+
+// Send password reset email
+export const resetPassword = async (email) => {
+  try {
+    if (!isAllowedDomain(email)) {
+      return {
+        success: false,
+        error: `Only @${ALLOWED_DOMAIN} email addresses are allowed.`,
+      };
+    }
+    await sendPasswordResetEmail(auth, email);
+    return { success: true };
+  } catch (error) {
+    let message = "Failed to send password reset email.";
+    if (error.code === "auth/user-not-found") {
+      message = "No account found with this email address.";
+    } else if (error.code === "auth/too-many-requests") {
+      message = "Too many requests. Please wait a few minutes before trying again.";
+    } else if (error.code === "auth/invalid-email") {
+      message = "Invalid email address.";
+    }
+    return { success: false, error: message };
   }
 };
 

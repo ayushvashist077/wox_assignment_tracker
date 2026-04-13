@@ -5,60 +5,45 @@ import Button from "../UI/Button";
 const AssignmentCard = ({ assignment, isCR, onEdit, onDelete, onToggleStatus }) => {
   const urgency = getUrgencyLevel(assignment.deadline);
 
-  // Get file icon based on file type
-  const getFileIcon = (type) => {
-    if (!type) return "📄";
-    if (type.includes("pdf")) return "📕";
-    if (type.includes("word") || type.includes("doc")) return "📘";
-    if (type.includes("sheet") || type.includes("csv") || type.includes("excel")) return "📗";
-    if (type.includes("image")) return "🖼️";
-    if (type.includes("presentation") || type.includes("ppt")) return "📙";
-    if (type.includes("zip") || type.includes("rar")) return "🗜️";
-    return "📄";
-  };
-
-  // Format file size
-  const formatFileSize = (bytes) => {
-    if (!bytes) return "";
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / 1048576).toFixed(1)} MB`;
+  const getLinkIcon = (url) => {
+    if (!url) return "🔗";
+    if (url.includes("drive.google")) return "📁";
+    if (url.includes("docs.google")) return "📝";
+    if (url.includes("onedrive") || url.includes("sharepoint")) return "📂";
+    if (url.includes("dropbox")) return "📦";
+    if (url.includes(".pdf")) return "📕";
+    return "🔗";
   };
 
   return (
     <div className={`assignment-card urgency-${urgency}`}>
       <div className="card-header">
         <span className="card-subject">{assignment.subject}</span>
-        <span className={`card-urgency urgency-badge-${urgency}`}>
-          {getUrgencyLabel(assignment.deadline)}
-        </span>
+        {assignment.status !== "Completed" && (
+          <span className={`card-urgency urgency-badge-${urgency}`}>
+            {getUrgencyLabel(assignment.deadline)}
+          </span>
+        )}
       </div>
 
       <h3 className="card-title">{assignment.title}</h3>
       <p className="card-description">{assignment.description}</p>
 
-      {/* Attachments Section */}
-      {assignment.attachments && assignment.attachments.length > 0 && (
+      {/* Links Section */}
+      {assignment.links && assignment.links.length > 0 && (
         <div className="card-attachments">
-          <p className="attachments-title">📎 Attachments:</p>
+          <p className="attachments-title">🔗 Documents:</p>
           <ul className="attachments-list">
-            {assignment.attachments.map((file, index) => (
+            {assignment.links.map((link, index) => (
               <li key={index} className="attachment-item">
                 <a
-                  href={file.url}
+                  href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="attachment-link"
                 >
-                  <span className="attachment-icon">
-                    {getFileIcon(file.type)}
-                  </span>
-                  <span className="attachment-name">{file.name}</span>
-                  {file.size && (
-                    <span className="attachment-size">
-                      ({formatFileSize(file.size)})
-                    </span>
-                  )}
+                  <span className="attachment-icon">{getLinkIcon(link.url)}</span>
+                  <span className="attachment-name">{link.label || link.url}</span>
                 </a>
               </li>
             ))}

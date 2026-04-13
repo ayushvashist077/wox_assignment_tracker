@@ -1,11 +1,7 @@
 import React from "react";
 import "../../styles/liquid-button.css";
 
-let glassFilterMounted = false;
-
 function GlassFilter() {
-  if (glassFilterMounted) return null;
-  glassFilterMounted = true;
   return (
     <svg className="liquid-glass-svg" aria-hidden="true">
       <defs>
@@ -25,30 +21,16 @@ function GlassFilter() {
   );
 }
 
-const Button = ({
-  children,
-  onClick,
-  type = "button",
-  variant = "primary",
-  disabled = false,
-  fullWidth = false,
-  className = "",
-  size,
-}) => {
-  const sizeClass = size === "sm" ? "liquid-btn-sm" : size === "lg" ? "liquid-btn-lg" : "liquid-btn-sm";
-
+const LiquidButton = ({ children, onClick, type = "button", disabled = false, className = "", size = "md", variant = "primary" }) => {
+  const sizeClass = size === "sm" ? "liquid-btn-sm" : size === "lg" ? "liquid-btn-lg" : "liquid-btn-md";
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      style={fullWidth ? { width: "100%" } : {}}
       className={`liquid-btn liquid-btn-variant-${variant} ${sizeClass} ${className}`}
     >
-      <div
-        className="liquid-btn-backdrop"
-        style={{ backdropFilter: 'url("#liquid-glass-filter")' }}
-      />
+      <div className="liquid-btn-backdrop" style={{ backdropFilter: 'url("#liquid-glass-filter")' }} />
       <div className={`liquid-btn-glow liquid-btn-glow-${variant}`} />
       <div className="liquid-btn-inner-shadow" />
       <span className="liquid-btn-text">{children}</span>
@@ -57,4 +39,4 @@ const Button = ({
   );
 };
 
-export default Button;
+export default LiquidButton;

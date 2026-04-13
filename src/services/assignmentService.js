@@ -10,7 +10,6 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { db } from "./firebase";
-import { uploadMultipleFiles, deleteFile } from "./storageService";
 
 const COLLECTION_NAME = "assignments";
 
@@ -22,10 +21,27 @@ export const getAssignments = async () => {
       orderBy("deadline", "asc")
     );
     const snapshot = await getDocs(q);
-    const assignments = snapshot.docs.map((doc) => ({
+    let assignments = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
+
+    // Check deadlines and update status if needed
+    const now = new Date();
+    const updates = [];
+    assignments = assignments.map((assignment) => {
+      let deadlineDate = assignment.deadline?.toDate ? assignment.deadline.toDate() : new Date(assignment.deadline);
+      if (assignment.status === "Pending" && deadlineDate < now) {
+        // Schedule update
+        updates.push(updateAssignment(assignment.id, { status: "Completed" }));
+        return { ...assignment, status: "Completed" };
+      }
+      return assignment;
+    });
+    if (updates.length > 0) {
+      // Fire and forget, don't block UI
+      Promise.all(updates).catch(() => {});
+    }
     return { success: true, data: assignments };
   } catch (error) {
     console.error("Error fetching assignments:", error);
@@ -33,10 +49,9 @@ export const getAssignments = async () => {
   }
 };
 
-// Add a new assignment (with optional file uploads)
-export const addAssignment = async (assignment, files = null) => {
+// Add a new assignment
+export const addAssignment = async (assignment) => {
   try {
-    // First create the assignment document
     const docRef = await addDoc(collection(db, COLLECTION_NAME), {
       subject: assignment.subject,
       title: assignment.title,
@@ -44,18 +59,8 @@ export const addAssignment = async (assignment, files = null) => {
       deadline: Timestamp.fromDate(new Date(assignment.deadline)),
       uploadedDate: Timestamp.now(),
       status: "Pending",
-      attachments: [],
+      links: assignment.links || [],
     });
-
-    // If files are provided, upload them
-    if (files && files.length > 0) {
-      const uploadResult = await uploadMultipleFiles(files, docRef.id);
-      if (uploadResult.files.length > 0) {
-        await updateDoc(docRef, {
-          attachments: uploadResult.files,
-        });
-      }
-    }
 
     return { success: true, id: docRef.id };
   } catch (error) {
@@ -64,29 +69,16 @@ export const addAssignment = async (assignment, files = null) => {
   }
 };
 
-// Update an existing assignment (with optional new file uploads)
-export const updateAssignment = async (id, updatedData, newFiles = null) => {
+// Update an existing assignment
+export const updateAssignment = async (id, updatedData) => {
   try {
     const docRef = doc(db, COLLECTION_NAME, id);
     const dataToUpdate = { ...updatedData };
 
-    // If deadline is being updated, convert to Timestamp
     if (dataToUpdate.deadline && typeof dataToUpdate.deadline === "string") {
       dataToUpdate.deadline = Timestamp.fromDate(
         new Date(dataToUpdate.deadline)
       );
-    }
-
-    // If new files are provided, upload them
-    if (newFiles && newFiles.length > 0) {
-      const uploadResult = await uploadMultipleFiles(newFiles, id);
-      if (uploadResult.files.length > 0) {
-        const existingAttachments = dataToUpdate.attachments || [];
-        dataToUpdate.attachments = [
-          ...existingAttachments,
-          ...uploadResult.files,
-        ];
-      }
     }
 
     await updateDoc(docRef, dataToUpdate);
@@ -97,15 +89,9 @@ export const updateAssignment = async (id, updatedData, newFiles = null) => {
   }
 };
 
-// Delete an assignment (and its files from Storage)
-export const deleteAssignment = async (id, attachments = []) => {
+// Delete an assignment
+export const deleteAssignment = async (id) => {
   try {
-    // Delete all attached files from Storage
-    if (attachments && attachments.length > 0) {
-      const deletePromises = attachments.map((file) => deleteFile(file.path));
-      await Promise.all(deletePromises);
-    }
-
     await deleteDoc(doc(db, COLLECTION_NAME, id));
     return { success: true };
   } catch (error) {

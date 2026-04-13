@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { loginWithEmail, registerWithEmail, isAllowedDomain } from "../../services/authService";
 import Button from "../UI/Button";
+import ForgotPassword from "./ForgotPassword";
 
 const ALLOWED_DOMAIN = "woxsen.edu.in";
 
@@ -15,6 +16,7 @@ const Login = ({ onClose }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [registered, setRegistered] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -92,6 +94,10 @@ const Login = ({ onClose }) => {
     setRegistered(false);
     setFormData({ name: "", email: "", password: "", confirmPassword: "" });
   };
+
+  if (showForgotPassword) {
+    return <ForgotPassword onBack={() => setShowForgotPassword(false)} />;
+  }
 
   // Show success message after registration
   if (registered) {
@@ -190,6 +196,16 @@ const Login = ({ onClose }) => {
               placeholder="Enter your password"
               disabled={loading}
             />
+            {!isRegister && (
+              <button
+                type="button"
+                className="forgot-password-btn"
+                onClick={() => setShowForgotPassword(true)}
+                disabled={loading}
+              >
+                Forgot password?
+              </button>
+            )}
           </div>
 
           {isRegister && (

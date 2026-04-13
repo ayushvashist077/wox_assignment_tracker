@@ -6,6 +6,7 @@ import CRDashboard from "./components/Dashboard/CRDashboard";
 import StudentDashboard from "./components/Dashboard/StudentDashboard";
 import PendingApproval from "./components/Auth/PendingApproval";
 import VerifyEmail from "./components/Auth/VerifyEmail";
+import Landing from "./components/Landing";
 import Loader from "./components/UI/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,6 +16,8 @@ import "./styles/dashboard.css";
 import "./styles/assignments.css";
 import "./styles/admin.css";
 import "./styles/responsive.css";
+import "./styles/liquid-button.css";
+import "./styles/landing.css";
 
 const AppContent = () => {
   const { user, loading, isCRUser, approvalStatus } = useAuthContext();
@@ -23,8 +26,13 @@ const AppContent = () => {
     return <Loader message="Loading Assignment Tracker..." />;
   }
 
-  // If user is logged in but email not verified
-  if (user && approvalStatus === "unverified") {
+  // No user → show landing page (full page, no header/footer wrapper)
+  if (!user) {
+    return <Landing />;
+  }
+
+  // Email not verified
+  if (approvalStatus === "unverified") {
     return (
       <>
         <Header />
@@ -36,8 +44,8 @@ const AppContent = () => {
     );
   }
 
-  // If user is logged in but not approved (pending or rejected)
-  if (user && approvalStatus !== "approved") {
+  // Not yet approved
+  if (approvalStatus !== "approved") {
     return (
       <>
         <Header />
@@ -53,7 +61,7 @@ const AppContent = () => {
     <>
       <Header />
       <main className="main-content">
-        {user && isCRUser ? <CRDashboard /> : <StudentDashboard />}
+        {isCRUser ? <CRDashboard /> : <StudentDashboard />}
       </main>
       <Footer />
     </>

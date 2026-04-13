@@ -1,7 +1,7 @@
 import React from "react";
 import { SUBJECTS } from "../../utils/constants";
 
-const AssignmentFilters = ({ filters, onFilterChange }) => {
+const AssignmentFilters = ({ filters, onFilterChange, isCR }) => {
   return (
     <div className="filters-container">
       <div className="filter-group">
@@ -19,17 +19,19 @@ const AssignmentFilters = ({ filters, onFilterChange }) => {
         </select>
       </div>
 
-      <div className="filter-group">
-        <label>Filter by Status:</label>
-        <select
-          value={filters.status}
-          onChange={(e) => onFilterChange("status", e.target.value)}
-        >
-          <option value="">All</option>
-          <option value="Pending">Pending</option>
-          <option value="Completed">Completed</option>
-        </select>
-      </div>
+      {isCR && (
+        <div className="filter-group">
+          <label>Filter by Status:</label>
+          <select
+            value={filters.status}
+            onChange={(e) => onFilterChange("status", e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+      )}
 
       <div className="filter-group">
         <label>Sort by:</label>

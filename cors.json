@@ -1,0 +1,14 @@
+[
+  {
+    "origin": ["http://localhost:3000", "https://assignment-tracker-a787c.web.app", "https://assignment-tracker-a787c.firebaseapp.com"],
+    "method": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
+    "maxAgeSeconds": 3600,
+    "responseHeader": [
+      "Content-Type",
+      "Authorization",
+      "Content-Length",
+      "User-Agent",
+      "x-goog-resumable"
+    ]
+  }
+]

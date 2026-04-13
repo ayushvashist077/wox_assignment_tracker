@@ -10,8 +10,8 @@ const AssignmentForm = ({ onSubmit, initialData = null, onCancel }) => {
     description: "",
     deadline: "",
   });
-  const [files, setFiles] = useState(null);
-  const [uploading, setUploading] = useState(false);
+  const [links, setLinks] = useState([{ label: "", url: "" }]);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (initialData) {
@@ -21,6 +21,9 @@ const AssignmentForm = ({ onSubmit, initialData = null, onCancel }) => {
         description: initialData.description || "",
         deadline: formatDateForInput(initialData.deadline) || "",
       });
+      if (initialData.links && initialData.links.length > 0) {
+        setLinks(initialData.links.map((l) => ({ label: l.label || "", url: l.url || "" })));
+      }
     }
   }, [initialData]);
 
@@ -29,54 +32,32 @@ const AssignmentForm = ({ onSubmit, initialData = null, onCancel }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
-    setFiles(e.target.files);
+  const handleLinkChange = (index, field, value) => {
+    setLinks((prev) => prev.map((l, i) => (i === index ? { ...l, [field]: value } : l)));
   };
 
-  const handleRemoveFiles = () => {
-    setFiles(null);
-    // Reset the file input
-    const fileInput = document.getElementById("attachments");
-    if (fileInput) fileInput.value = "";
-  };
+  const addLink = () => setLinks((prev) => [...prev, { label: "", url: "" }]);
+
+  const removeLink = (index) => setLinks((prev) => prev.filter((_, i) => i !== index));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !formData.subject ||
-      !formData.title ||
-      !formData.description ||
-      !formData.deadline
-    ) {
+    if (!formData.subject || !formData.title || !formData.description || !formData.deadline) {
       alert("Please fill in all fields!");
       return;
     }
 
-    setUploading(true);
+    setSubmitting(true);
 
-    if (initialData) {
-      // Editing — pass existing attachments + new files
-      await onSubmit(formData, files);
-    } else {
-      // Adding new
-      await onSubmit(formData, files);
-    }
+    const validLinks = links.filter((l) => l.url.trim() !== "");
+    await onSubmit({ ...formData, links: validLinks });
 
-    setUploading(false);
+    setSubmitting(false);
 
     if (!initialData) {
       setFormData({ subject: "", title: "", description: "", deadline: "" });
-      setFiles(null);
-      const fileInput = document.getElementById("attachments");
-      if (fileInput) fileInput.value = "";
+      setLinks([{ label: "", url: "" }]);
     }
-  };
-
-  // Format file size
-  const formatFileSize = (bytes) => {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / 1048576).toFixed(1)} MB`;
   };
 
   return (
@@ -138,80 +119,39 @@ const AssignmentForm = ({ onSubmit, initialData = null, onCancel }) => {
       </div>
 
       <div className="form-group">
-        <label htmlFor="attachments">
-          📎 Attach Files{" "}
-          <span className="file-hint">(PDF, DOC, CSV, images, etc.)</span>
-        </label>
-        <input
-          type="file"
-          id="attachments"
-          name="attachments"
-          onChange={handleFileChange}
-          multiple
-          className="file-input"
-        />
-        {files && files.length > 0 && (
-          <div className="selected-files">
-            <p className="selected-files-title">
-              📁 {files.length} file(s) selected:
-            </p>
-            <ul className="file-list">
-              {Array.from(files).map((file, index) => (
-                <li key={index} className="file-item">
-                  <span className="file-name">{file.name}</span>
-                  <span className="file-size">
-                    ({formatFileSize(file.size)})
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <button
-              type="button"
-              className="remove-files-btn"
-              onClick={handleRemoveFiles}
-            >
-              ✕ Remove all files
-            </button>
+        <label>🔗 Document Links <span className="file-hint">(Google Drive, OneDrive, etc.)</span></label>
+        {links.map((link, index) => (
+          <div key={index} className="link-row">
+            <input
+              type="text"
+              placeholder="Label (e.g. Question Paper)"
+              value={link.label}
+              onChange={(e) => handleLinkChange(index, "label", e.target.value)}
+              className="link-label-input"
+            />
+            <input
+              type="url"
+              placeholder="https://drive.google.com/..."
+              value={link.url}
+              onChange={(e) => handleLinkChange(index, "url", e.target.value)}
+              className="link-url-input"
+            />
+            {links.length > 1 && (
+              <button type="button" className="remove-link-btn" onClick={() => removeLink(index)}>✕</button>
+            )}
           </div>
-        )}
-
-        {/* Show existing attachments when editing */}
-        {initialData && initialData.attachments && initialData.attachments.length > 0 && (
-          <div className="existing-files">
-            <p className="existing-files-title">📌 Current attachments:</p>
-            <ul className="file-list">
-              {initialData.attachments.map((file, index) => (
-                <li key={index} className="file-item">
-                  <a
-                    href={file.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="file-link"
-                  >
-                    {file.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        ))}
+        <button type="button" className="add-link-btn" onClick={addLink}>
+          + Add another link
+        </button>
       </div>
 
       <div className="form-actions">
-        <Button type="submit" variant="success" disabled={uploading}>
-          {uploading
-            ? "⏳ Uploading..."
-            : initialData
-            ? "Update Assignment"
-            : "Add Assignment"}
+        <Button type="submit" variant="success" disabled={submitting}>
+          {submitting ? "⏳ Saving..." : initialData ? "Update Assignment" : "Add Assignment"}
         </Button>
         {onCancel && (
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={onCancel}
-            disabled={uploading}
-          >
+          <Button type="button" variant="secondary" onClick={onCancel} disabled={submitting}>
             Cancel
           </Button>
         )}

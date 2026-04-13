@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { useAssignments } from "../../hooks/useAssignments";
 import { useAuthContext } from "../../context/AuthContext";
 import AssignmentForm from "../Assignments/AssignmentForm";
@@ -8,6 +9,14 @@ import Modal from "../UI/Modal";
 import Button from "../UI/Button";
 import { exportAssignmentsPDF } from "../../utils/pdfExport";
 import { toast } from "react-toastify";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i = 0) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
 
 const CRDashboard = () => {
   const {
@@ -25,7 +34,6 @@ const CRDashboard = () => {
   const handleAdd = async (formData, files) => {
     const result = await addAssignment(formData, files);
     if (result.success) {
-      toast.success("✅ Assignment added successfully!");
       setShowForm(false);
     } else {
       toast.error("❌ Failed to add assignment.");
@@ -40,7 +48,6 @@ const CRDashboard = () => {
     };
     const result = await updateAssignment(editingAssignment.id, dataToUpdate, newFiles);
     if (result.success) {
-      toast.success("✅ Assignment updated successfully!");
       setEditingAssignment(null);
     } else {
       toast.error("❌ Failed to update assignment.");
@@ -59,10 +66,7 @@ const CRDashboard = () => {
   };
 
   const handleToggleStatus = async (id, newStatus) => {
-    const result = await updateAssignment(id, { status: newStatus });
-    if (result.success) {
-      toast.info(`Status changed to ${newStatus}`);
-    }
+    await updateAssignment(id, { status: newStatus });
   };
 
   const handleEdit = (assignment) => {
@@ -71,7 +75,13 @@ const CRDashboard = () => {
 
   return (
     <div className="dashboard">
-      <div className="dashboard-header">
+      <motion.div
+        className="dashboard-header"
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp}
+        custom={0}
+      >
         <h2>🛡️ CR Dashboard</h2>
         <div className="dashboard-actions">
           {isAdmin && (
@@ -92,21 +102,27 @@ const CRDashboard = () => {
             📄 Export PDF
           </Button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Admin Panel (only visible to super admin) */}
       {isAdmin && showAdmin && <AdminPanel />}
 
-      <div className="dashboard-stats">
+      <motion.div
+        className="dashboard-stats"
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp}
+        custom={1}
+      >
         <div className="stat-card">
           <span className="stat-number">{assignments.length}</span>
-          <span className="stat-label">Total</span>
+          <span className="stat-label">Total Assignments</span>
         </div>
         <div className="stat-card">
           <span className="stat-number">
             {assignments.filter((a) => a.status === "Pending").length}
           </span>
-          <span className="stat-label">Pending</span>
+          <span className="stat-label">Due Soon</span>
         </div>
         <div className="stat-card">
           <span className="stat-number">
@@ -114,9 +130,7 @@ const CRDashboard = () => {
           </span>
           <span className="stat-label">Completed</span>
         </div>
-      </div>
-
-      {/* Add Assignment Modal */}
+      </motion.div>
       <Modal
         isOpen={showForm}
         onClose={() => setShowForm(false)}
@@ -141,14 +155,16 @@ const CRDashboard = () => {
         />
       </Modal>
 
-      <AssignmentList
-        assignments={assignments}
-        loading={loading}
-        isCR={true}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onToggleStatus={handleToggleStatus}
-      />
+      <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={2}>
+        <AssignmentList
+          assignments={assignments}
+          loading={loading}
+          isCR={true}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onToggleStatus={handleToggleStatus}
+        />
+      </motion.div>
     </div>
   );
 };
