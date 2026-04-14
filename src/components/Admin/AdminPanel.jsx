@@ -149,10 +149,10 @@ const AdminPanel = () => {
     <div className="admin-panel">
       <div className="admin-header">
         <div className="admin-title-section">
-          <h3>⚙️ Admin Panel</h3>
+          <h3>Admin Panel</h3>
           <p>Manage Users & Class Representatives</p>
         </div>
-        <div className="admin-badge">🔑 Super Admin</div>
+        <div className="admin-badge">Super Admin</div>
       </div>
 
       {/* Tabs */}

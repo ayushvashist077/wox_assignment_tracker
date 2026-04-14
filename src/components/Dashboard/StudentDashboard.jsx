@@ -8,17 +8,14 @@ import { exportAssignmentsPDF } from "../../utils/pdfExport";
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: (i = 0) => ({
-    opacity: 1, y: 0,
+    opacity: 1,
+    y: 0,
     transition: { duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] },
   }),
 };
 
 const StudentDashboard = () => {
-  const { assignments, loading, updateAssignment } = useAssignments();
-
-  const handleToggleStatus = async (id, newStatus) => {
-    await updateAssignment(id, { status: newStatus });
-  };
+  const { assignments, loading } = useAssignments();
 
   return (
     <div className="dashboard">
@@ -29,12 +26,9 @@ const StudentDashboard = () => {
         variants={fadeUp}
         custom={0}
       >
-        <h2>👨‍🎓 Student View</h2>
-        <Button
-          variant="outline"
-          onClick={() => exportAssignmentsPDF(assignments)}
-        >
-          📄 Export PDF
+        <h2>Student View</h2>
+        <Button variant="outline" onClick={() => exportAssignmentsPDF(assignments)}>
+          Export PDF
         </Button>
       </motion.div>
 
@@ -63,14 +57,19 @@ const StudentDashboard = () => {
         </div>
       </motion.div>
 
-      <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={2}>
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp}
+        custom={2}
+      >
         <AssignmentList
           assignments={assignments}
           loading={loading}
           isCR={false}
           onEdit={() => {}}
           onDelete={() => {}}
-          onToggleStatus={handleToggleStatus}
+          onToggleStatus={() => {}}
         />
       </motion.div>
     </div>

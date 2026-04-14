@@ -71,6 +71,8 @@
 
 .landing-nav-brand {
   display: flex;
+  flex-direction: column; /* stacks items vertically */
+  line-height: 1.2; /* optional: tighter spacing */
   align-items: center;
   gap: 10px;
 }

@@ -1,18 +1,28 @@
 import React from "react";
-import { formatDate, getUrgencyLevel, getUrgencyLabel } from "../../utils/helpers";
+import {
+  formatDate,
+  getUrgencyLevel,
+  getUrgencyLabel,
+} from "../../utils/helpers";
 import Button from "../UI/Button";
 
-const AssignmentCard = ({ assignment, isCR, onEdit, onDelete, onToggleStatus }) => {
+const AssignmentCard = ({
+  assignment,
+  isCR,
+  onEdit,
+  onDelete,
+  onToggleStatus,
+}) => {
   const urgency = getUrgencyLevel(assignment.deadline);
 
   const getLinkIcon = (url) => {
-    if (!url) return "🔗";
-    if (url.includes("drive.google")) return "📁";
-    if (url.includes("docs.google")) return "📝";
-    if (url.includes("onedrive") || url.includes("sharepoint")) return "📂";
-    if (url.includes("dropbox")) return "📦";
-    if (url.includes(".pdf")) return "📕";
-    return "🔗";
+    if (!url) return "Link";
+    if (url.includes("drive.google")) return "Drive";
+    if (url.includes("docs.google")) return "Docs";
+    if (url.includes("onedrive") || url.includes("sharepoint")) return "Cloud";
+    if (url.includes("dropbox")) return "Box";
+    if (url.includes(".pdf")) return "PDF";
+    return "Link";
   };
 
   return (
@@ -29,10 +39,9 @@ const AssignmentCard = ({ assignment, isCR, onEdit, onDelete, onToggleStatus }) 
       <h3 className="card-title">{assignment.title}</h3>
       <p className="card-description">{assignment.description}</p>
 
-      {/* Links Section */}
       {assignment.links && assignment.links.length > 0 && (
         <div className="card-attachments">
-          <p className="attachments-title">🔗 Documents:</p>
+          <p className="attachments-title">Documents:</p>
           <ul className="attachments-list">
             {assignment.links.map((link, index) => (
               <li key={index} className="attachment-item">
@@ -53,10 +62,10 @@ const AssignmentCard = ({ assignment, isCR, onEdit, onDelete, onToggleStatus }) 
 
       <div className="card-meta">
         <span className="card-deadline">
-          📅 Deadline: {formatDate(assignment.deadline)}
+          Deadline: {formatDate(assignment.deadline)}
         </span>
         <span className="card-uploaded">
-          📤 Uploaded: {formatDate(assignment.uploadedDate)}
+          Uploaded: {formatDate(assignment.uploadedDate)}
         </span>
       </div>
 
@@ -64,31 +73,35 @@ const AssignmentCard = ({ assignment, isCR, onEdit, onDelete, onToggleStatus }) 
         <span
           className={`card-status status-${assignment.status.toLowerCase()}`}
         >
-          {assignment.status === "Pending" ? "⏳ Pending" : "✅ Completed"}
+          {assignment.status === "Pending" ? "Pending" : "Completed"}
         </span>
 
         <div className="card-actions">
-          <Button
-            variant={assignment.status === "Pending" ? "success" : "secondary"}
-            onClick={() =>
-              onToggleStatus(
-                assignment.id,
-                assignment.status === "Pending" ? "Completed" : "Pending"
-              )
-            }
-          >
-            {assignment.status === "Pending"
-              ? "Mark Done"
-              : "Mark Pending"}
-          </Button>
-
           {isCR && (
             <>
-              <Button variant="primary" onClick={() => onEdit(assignment)}>
-                ✏️ Edit
+              <Button
+                variant={
+                  assignment.status === "Pending" ? "success" : "secondary"
+                }
+                onClick={() =>
+                  onToggleStatus(
+                    assignment.id,
+                    assignment.status === "Pending" ? "Completed" : "Pending"
+                  )
+                }
+              >
+                {assignment.status === "Pending"
+                  ? "Mark Done"
+                  : "Mark Pending"}
               </Button>
-              <Button variant="danger" onClick={() => onDelete(assignment.id, assignment.attachments)}>
-                🗑️ Delete
+              <Button variant="primary" onClick={() => onEdit(assignment)}>
+                Edit
+              </Button>
+              <Button
+                variant="danger"
+                onClick={() => onDelete(assignment.id, assignment.attachments)}
+              >
+                Delete
               </Button>
             </>
           )}

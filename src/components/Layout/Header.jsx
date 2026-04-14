@@ -17,8 +17,8 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-left">
-        <h1 className="header-title">📚 Assignment Tracker</h1>
-        <span className="header-subtitle">MBA Dashboard</span>
+        <h1 className="header-title">Assignment Tracker</h1>
+        <span className="header-subtitle">MBA BA Dashboard</span>
       </div>
 
       <div className="header-right">

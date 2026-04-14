@@ -127,8 +127,9 @@ const Landing = () => {
       {/* ── Navbar ── */}
       <nav className="landing-nav">
         <div className="landing-nav-brand">
-          <span className="landing-nav-logo">📚</span>
+          
           <span className="landing-nav-name">Assignment Tracker</span>
+          <span className="header-subtitle">MBA BA Dashboard</span>
         </div>
         <LiquidButton size="sm" onClick={() => setShowLogin(true)}>
           🔐 Sign In
@@ -288,7 +289,7 @@ const Landing = () => {
 
       {/* ── Footer ── */}
       <footer className="landing-footer">
-        <p>Made with ❤️ for MBA Class · © {new Date().getFullYear()} Assignment Tracker</p>
+        <p>Made MBA BA | Batch of 2027 | © {new Date().getFullYear()} Assignment Tracker</p>
       </footer>
 
       {/* ── Login Modal ── */}

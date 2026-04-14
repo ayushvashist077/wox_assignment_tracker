@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <p>
-        Made with ❤️ for MBA Class | © {new Date().getFullYear()} Assignment
+        Made for MBA BA | Batch of 2027 | © {new Date().getFullYear()} Assignment
         Tracker
       </p>
     </footer>
