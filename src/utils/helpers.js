@@ -21,9 +21,7 @@ export const getUrgencyLevel = (deadline) => {
   if (!deadline) return "normal";
   const now = new Date();
   const deadlineDate = deadline.toDate ? deadline.toDate() : new Date(deadline);
-  const diffDays = Math.ceil(
-    (deadlineDate - now) / (1000 * 60 * 60 * 24)
-  );
+  const diffDays = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24));
 
   if (diffDays < 0) return "overdue";
   if (diffDays <= 1) return "critical";
@@ -31,19 +29,43 @@ export const getUrgencyLevel = (deadline) => {
   return "normal";
 };
 
+export const getDaysUntilDeadline = (deadline) => {
+  if (!deadline) return null;
+
+  const deadlineDate = deadline.toDate ? deadline.toDate() : new Date(deadline);
+  const today = new Date();
+  const startOfToday = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+  const startOfDeadline = new Date(
+    deadlineDate.getFullYear(),
+    deadlineDate.getMonth(),
+    deadlineDate.getDate()
+  );
+
+  return Math.round((startOfDeadline - startOfToday) / (1000 * 60 * 60 * 24));
+};
+
 // Get urgency label
 export const getUrgencyLabel = (deadline) => {
-  const level = getUrgencyLevel(deadline);
-  switch (level) {
-    case "overdue":
-      return "⚠️ Overdue";
-    case "critical":
-      return "🔴 Due Today";
-    case "urgent":
-      return "🟡 Due Soon";
-    default:
-      return "🟢 On Track";
+  const daysUntilDeadline = getDaysUntilDeadline(deadline);
+
+  if (daysUntilDeadline === null) {
+    return "No deadline";
   }
+
+  if (daysUntilDeadline < 0) {
+    const daysOverdue = Math.abs(daysUntilDeadline);
+    return `Overdue by ${daysOverdue} day${daysOverdue === 1 ? "" : "s"}`;
+  }
+
+  if (daysUntilDeadline === 0) {
+    return "Due today";
+  }
+
+  return `Due in ${daysUntilDeadline} day${daysUntilDeadline === 1 ? "" : "s"}`;
 };
 
 // Sort assignments

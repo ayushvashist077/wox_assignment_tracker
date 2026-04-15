@@ -104,14 +104,19 @@
 .urgency-overdue { background: linear-gradient(135deg, rgba(239,68,68,0.08) 0%, var(--surface) 60%); }
 
 .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px;
   margin-bottom: 12px;
   padding-left: 6px;
 }
 
 .card-subject {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
   background: rgba(99, 102, 241, 0.15);
   color: #818cf8;
   padding: 4px 12px;
@@ -121,11 +126,17 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   border: 1px solid rgba(99, 102, 241, 0.25);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .card-urgency {
   font-size: 0.75rem;
   font-weight: 700;
+  white-space: nowrap;
+  text-align: right;
+  line-height: 1.2;
+  align-self: center;
 }
 
 .urgency-badge-overdue,

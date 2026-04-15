@@ -3,6 +3,13 @@ import { SUBJECTS } from "../../utils/constants";
 import { formatDateForInput } from "../../utils/helpers";
 import Button from "../UI/Button";
 
+const getLocalDateInputValue = (date = new Date()) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 const AssignmentForm = ({ onSubmit, initialData = null, onCancel }) => {
   const [formData, setFormData] = useState({
     subject: "",
@@ -12,6 +19,13 @@ const AssignmentForm = ({ onSubmit, initialData = null, onCancel }) => {
   });
   const [links, setLinks] = useState([{ label: "", url: "" }]);
   const [submitting, setSubmitting] = useState(false);
+  const todayDate = getLocalDateInputValue();
+  const existingDeadline = initialData?.deadline
+    ? formatDateForInput(initialData.deadline)
+    : "";
+  const minDeadline = existingDeadline && existingDeadline < todayDate
+    ? existingDeadline
+    : todayDate;
 
   useEffect(() => {
     if (initialData) {
@@ -44,6 +58,11 @@ const AssignmentForm = ({ onSubmit, initialData = null, onCancel }) => {
     e.preventDefault();
     if (!formData.subject || !formData.title || !formData.description || !formData.deadline) {
       alert("Please fill in all fields!");
+      return;
+    }
+
+    if (formData.deadline < todayDate && formData.deadline !== existingDeadline) {
+      alert("Deadline cannot be in the past.");
       return;
     }
 
@@ -114,6 +133,7 @@ const AssignmentForm = ({ onSubmit, initialData = null, onCancel }) => {
           name="deadline"
           value={formData.deadline}
           onChange={handleChange}
+          min={minDeadline}
           required
         />
       </div>

@@ -43,7 +43,9 @@ const Login = ({ onClose }) => {
     setLoading(false);
 
     if (result.success) {
-      if (onClose) onClose();
+      if (onClose) {
+        onClose();
+      }
     } else {
       setError(result.error);
     }
@@ -53,7 +55,12 @@ const Login = ({ onClose }) => {
     e.preventDefault();
     setError("");
 
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
       setError("Please fill in all fields.");
       return;
     }
@@ -99,41 +106,47 @@ const Login = ({ onClose }) => {
     return <ForgotPassword onBack={() => setShowForgotPassword(false)} />;
   }
 
-  // Show success message after registration
   if (registered) {
     return (
       <div className="login-container">
         <div className="login-card">
-          <div className="login-icon">✅</div>
+          <div className="login-icon">OK</div>
           <h2>Registration Successful!</h2>
           <p>
-            Your account has been created. Please wait for the admin to approve
-            your access.
+            Your account has been created. Verify your email first, then wait
+            for the admin to approve your access.
           </p>
 
           <div className="registered-info-box">
             <div className="registered-row">
-              <span className="registered-label">👤 Name:</span>
+              <span className="registered-label">Name:</span>
               <span className="registered-value">{formData.name}</span>
             </div>
             <div className="registered-row">
-              <span className="registered-label">📧 Email:</span>
+              <span className="registered-label">Email:</span>
               <span className="registered-value">{formData.email}</span>
             </div>
             <div className="registered-row">
-              <span className="registered-label">📋 Status:</span>
-              <span className="registered-status">⏳ Pending Approval</span>
+              <span className="registered-label">Status:</span>
+              <span className="registered-status">Email Verification Required</span>
             </div>
           </div>
 
           <div className="registered-actions">
-            <Button variant="primary" onClick={() => { if (onClose) onClose(); }}>
-              👍 Got it
+            <Button
+              variant="primary"
+              onClick={() => {
+                if (onClose) {
+                  onClose();
+                }
+              }}
+            >
+              Got it
             </Button>
           </div>
 
           <p className="login-note">
-            💡 Contact your CR to speed up the approval process.
+            After email verification, your request will move to admin approval.
           </p>
         </div>
       </div>
@@ -143,9 +156,7 @@ const Login = ({ onClose }) => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <div className="login-icon">
-          {isRegister ? "📝" : "🔐"}
-        </div>
+        <div className="login-icon">{isRegister ? "New" : "Sign In"}</div>
         <h2>{isRegister ? "Create Account" : "Sign In"}</h2>
         <p>
           {isRegister
@@ -181,7 +192,7 @@ const Login = ({ onClose }) => {
               disabled={loading}
             />
             <span className="domain-hint">
-              🏫 Only @{ALLOWED_DOMAIN} emails are accepted
+              Only @{ALLOWED_DOMAIN} emails are accepted
             </span>
           </div>
 
@@ -223,22 +234,16 @@ const Login = ({ onClose }) => {
             </div>
           )}
 
-          {error && <p className="login-error">⚠️ {error}</p>}
+          {error && <p className="login-error">Error: {error}</p>}
 
           <Button type="submit" variant="primary" disabled={loading}>
-            {loading
-              ? "⏳ Please wait..."
-              : isRegister
-              ? "Create Account"
-              : "Sign In"}
+            {loading ? "Please wait..." : isRegister ? "Create Account" : "Sign In"}
           </Button>
         </form>
 
         <div className="login-switch">
           <p>
-            {isRegister
-              ? "Already have an account?"
-              : "Don't have an account?"}
+            {isRegister ? "Already have an account?" : "Don't have an account?"}
             <button
               type="button"
               className="switch-btn"
@@ -250,9 +255,7 @@ const Login = ({ onClose }) => {
           </p>
         </div>
 
-        <p className="login-note">
-          🔒 Only approved users can access assignments
-        </p>
+        <p className="login-note">Only approved users can access assignments.</p>
       </div>
     </div>
   );

@@ -570,32 +570,6 @@
   white-space: nowrap;
 }
 
-/* ...existing code... */
-/* ...existing code... */
-
-/* Manually Verify Button */
-.verify-manually-btn {
-  background: #e0e7ff;
-  border: 1px solid #a5b4fc;
-  color: #3730a3;
-  padding: 8px 14px;
-  border-radius: 10px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-
-.verify-manually-btn:hover {
-  background: #6366f1;
-  color: #fff;
-  border-color: #6366f1;
-  transform: scale(1.05);
-}
-
-/* ...existing code... */
 /* Responsive */
 @media (max-width: 768px) {
   .admin-panel {

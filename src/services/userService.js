@@ -123,25 +123,23 @@ export const syncVerificationStatus = async () => {
   }
 };
 
-// Manually mark a user as email verified (admin action)
-export const markUserVerified = async (uid) => {
-  try {
-    const userRef = doc(db, USERS_COLLECTION, uid);
-    await updateDoc(userRef, {
-      emailVerified: true,
-      verifiedAt: new Date(),
-    });
-    return { success: true };
-  } catch (error) {
-    console.error("Error marking user verified:", error);
-    return { success: false, error: error.message };
-  }
-};
-
 // Approve a user
 export const approveUser = async (uid, adminEmail) => {
   try {
     const userRef = doc(db, USERS_COLLECTION, uid);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      return { success: false, error: "User record not found." };
+    }
+
+    if (!userSnap.data().emailVerified) {
+      return {
+        success: false,
+        error: "User must verify their email before approval.",
+      };
+    }
+
     await updateDoc(userRef, {
       status: "approved",
       approvedAt: new Date(),

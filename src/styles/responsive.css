@@ -89,6 +89,16 @@
     padding: 14px;
   }
 
+  .card-header {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .card-urgency {
+    justify-self: start;
+    text-align: left;
+  }
+
   .card-title {
     font-size: 1rem;
   }

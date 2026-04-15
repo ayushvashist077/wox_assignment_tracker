@@ -171,15 +171,6 @@ const Landing = () => {
             <span className="landing-pill">🛡️ CR managed</span>
           </motion.div>
         </motion.div>
-
-        <motion.div
-          className="landing-scroll-hint"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-        >
-          <span className="landing-scroll-arrow">↓</span>
-          <span className="landing-scroll-label">Scroll to explore</span>
-        </motion.div>
       </section>
 
       {/* ── Container Scroll with Mock Dashboard ── */}
