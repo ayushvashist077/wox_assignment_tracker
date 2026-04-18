@@ -8,6 +8,7 @@ import {
   collection,
   query,
   orderBy,
+  Timestamp,
 } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -53,7 +54,7 @@ export const updateEmailVerifiedStatus = async (uid) => {
     if (userSnap.exists() && !userSnap.data().emailVerified) {
       await updateDoc(userRef, {
         emailVerified: true,
-        verifiedAt: new Date(),
+        verifiedAt: Timestamp.now(),
       });
     }
     return { success: true };

@@ -1,5 +1,6 @@
 import React from "react";
 import { AuthProvider, useAuthContext } from "./context/AuthContext";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
 import CRDashboard from "./components/Dashboard/CRDashboard";
@@ -21,6 +22,8 @@ import "./styles/landing.css";
 
 const AppContent = () => {
   const { user, loading, isCRUser, approvalStatus } = useAuthContext();
+  const { isDark } = useTheme();
+  const pageClass = isDark ? "dark-page" : "light-page";
 
   if (loading) {
     return <Loader message="Loading Assignment Tracker..." />;
@@ -31,49 +34,35 @@ const AppContent = () => {
     return <Landing />;
   }
 
+  const lightPageShell = (content) => (
+    <div className={pageClass}>
+      <Header />
+      <main className="main-content">
+        {content}
+      </main>
+      <Footer />
+    </div>
+  );
+
   // Email not verified
   if (approvalStatus === "unverified") {
-    return (
-      <>
-        <Header />
-        <main className="main-content">
-          <VerifyEmail />
-        </main>
-        <Footer />
-      </>
-    );
+    return lightPageShell(<VerifyEmail />);
   }
 
   // Not yet approved
   if (approvalStatus !== "approved") {
-    return (
-      <>
-        <Header />
-        <main className="main-content">
-          <PendingApproval />
-        </main>
-        <Footer />
-      </>
-    );
+    return lightPageShell(<PendingApproval />);
   }
 
-  return (
-    <>
-      <Header />
-      <main className="main-content">
-        {isCRUser ? <CRDashboard /> : <StudentDashboard />}
-      </main>
-      <Footer />
-    </>
-  );
+  return lightPageShell(isCRUser ? <CRDashboard /> : <StudentDashboard />);
 };
 
 const App = () => {
   return (
     <AuthProvider>
-      <div className="app">
-        <AppContent />
-        <ToastContainer
+      <ThemeProvider>
+      <AppContent />
+      <ToastContainer
           position="top-right"
           autoClose={3000}
           hideProgressBar={false}
@@ -82,7 +71,7 @@ const App = () => {
           pauseOnHover
           theme="colored"
         />
-      </div>
+      </ThemeProvider>
     </AuthProvider>
   );
 };

@@ -52,6 +52,521 @@ body {
   width: 100%;
 }
 
+/* ══════════════════════════════════════════════════
+   DASHBOARD THEME — Dark B&W (student + admin view)
+   Landing page is untouched.
+   ══════════════════════════════════════════════════ */
+.dark-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #0c0c0c;
+  background-image: radial-gradient(rgba(255,255,255,0.13) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: #f1f5f9;
+
+  --accent:        #e2e8f0;
+  --accent-light:  #cbd5e1;
+  --accent-2:      #94a3b8;
+  --surface:       #141414;
+  --surface-2:     #0e0e0e;
+  --surface-3:     #1c1c1c;
+  --border:        rgba(255, 255, 255, 0.08);
+  --text-1:        #f1f5f9;
+  --text-2:        #cbd5e1;
+  --text-3:        #64748b;
+  --shadow-sm:     0 1px 3px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
+  --shadow:        0 4px 16px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.4);
+  --shadow-lg:     0 12px 40px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.5);
+}
+
+/* ── Footer ── */
+.dark-page .footer {
+  background: rgba(0, 0, 0, 0.6);
+  color: #475569;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Dashboard header title ── */
+.dark-page .dashboard-header h2 {
+  background: linear-gradient(135deg, #f1f5f9 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark-page .dashboard-header {
+  border-bottom-color: rgba(255, 255, 255, 0.07);
+}
+
+/* ── Header subtitle badge (remove purple) ── */
+.dark-page .header-subtitle {
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ── Avatar (remove purple gradient) ── */
+.dark-page .user-avatar-placeholder {
+  background: linear-gradient(135deg, #374151, #1f2937);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Stat cards ── */
+.dark-page .stat-number {
+  background: linear-gradient(135deg, #f1f5f9 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark-page .stat-card::before {
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+}
+
+.dark-page .stat-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.4);
+}
+
+/* ── Assignment card — left accent bar (no purple) ── */
+.dark-page .assignment-card::before {
+  background: linear-gradient(180deg, #e2e8f0, #94a3b8);
+}
+
+.dark-page .assignment-card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.4);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Subject pill (remove purple) ── */
+.dark-page .card-subject {
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ── Overdue card bg (keep red, remove purple base) ── */
+.dark-page .urgency-overdue {
+  background: linear-gradient(135deg, rgba(239,68,68,0.08) 0%, var(--surface) 60%);
+}
+
+/* ── Attachment link (no purple) ── */
+.dark-page .attachment-link {
+  color: #e2e8f0;
+}
+.dark-page .attachment-link:hover {
+  color: #f8fafc;
+}
+
+/* ── Select + input focus (no purple ring) ── */
+.dark-page .filter-group select:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.07);
+}
+
+.dark-page .form-group input:focus,
+.dark-page .form-group select:focus,
+.dark-page .form-group textarea:focus,
+.dark-page .admin-input:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.07);
+}
+
+.dark-page .form-group input:hover,
+.dark-page .form-group select:hover,
+.dark-page .form-group textarea:hover,
+.dark-page .admin-input:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── File input hover (no purple) ── */
+.dark-page .file-input:hover {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* ── No assignments empty state ── */
+.dark-page .no-assignments {
+  background: var(--surface);
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+}
+
+/* ── Admin panel ── */
+.dark-page .admin-panel {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.3);
+}
+
+/* ── Admin tabs ── */
+.dark-page .admin-tabs {
+  background: var(--surface-2);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.dark-page .active-tab {
+  background: var(--surface-3);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.4);
+}
+
+.dark-page .admin-tab:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+}
+
+/* ── Admin section borders ── */
+.dark-page .admin-loading,
+.dark-page .admin-empty {
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+}
+
+.dark-page .admin-cr-item:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* ── Admin list header ── */
+.dark-page .admin-list-header {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark-page .admin-list-header h4 {
+  color: #cbd5e1;
+}
+
+.dark-page .admin-refresh-btn {
+  background: var(--surface-3);
+  color: #cbd5e1;
+}
+.dark-page .admin-refresh-btn:hover {
+  background: var(--surface-2);
+}
+
+/* ── Modal overlay ── */
+.dark-page .modal-overlay {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* ── Selected files box ── */
+.dark-page .selected-files {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+/* ══════════════════════════════════════════════════
+   THEME TOGGLE BUTTON (header)
+   ══════════════════════════════════════════════════ */
+.theme-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  margin-right: 14px;
+  flex-shrink: 0;
+}
+
+.theme-toggle-track {
+  display: flex;
+  align-items: center;
+  width: 56px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 100px;
+  padding: 2px;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.theme-toggle:hover .theme-toggle-track {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.theme-toggle-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  line-height: 1;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.25s ease;
+}
+
+/* Dark mode: moon on the right */
+.dark-page .theme-toggle-thumb {
+  transform: translateX(28px);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Light mode: sun on the left */
+.light-page .theme-toggle-thumb {
+  transform: translateX(0px);
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.light-page .theme-toggle-track {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.light-page .theme-toggle:hover .theme-toggle-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+/* ══════════════════════════════════════════════════
+   LIGHT THEME — actual white/light mode
+   ══════════════════════════════════════════════════ */
+.light-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+  background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: #0f172a;
+
+  --accent:        #1e293b;
+  --accent-light:  #334155;
+  --accent-2:      #475569;
+  --surface:       #ffffff;
+  --surface-2:     #f1f5f9;
+  --surface-3:     #e2e8f0;
+  --border:        rgba(0, 0, 0, 0.09);
+  --text-1:        #0f172a;
+  --text-2:        #334155;
+  --text-3:        #64748b;
+  --shadow-sm:     0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow:        0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-lg:     0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* ── Light: Footer ── */
+.light-page .footer {
+  background: #f1f5f9;
+  color: #64748b;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* ── Light: Header subtitle badge ── */
+.light-page .header-subtitle {
+  color: #334155;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* ── Light: Avatar ── */
+.light-page .user-avatar-placeholder {
+  background: linear-gradient(135deg, #334155, #1e293b);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #fff;
+}
+
+/* ── Light: Dashboard header title ── */
+.light-page .dashboard-header h2 {
+  background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.light-page .dashboard-header {
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+/* ── Light: Stat numbers (no purple) ── */
+.light-page .stat-number {
+  background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.light-page .stat-card::before {
+  background: radial-gradient(circle, rgba(0,0,0,0.03) 0%, transparent 70%);
+}
+
+.light-page .stat-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* ── Light: Assignment card accent bar ── */
+.light-page .assignment-card::before {
+  background: linear-gradient(180deg, #334155, #94a3b8);
+}
+
+.light-page .assignment-card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.07);
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+/* ── Light: Subject pill ── */
+.light-page .card-subject {
+  background: rgba(0, 0, 0, 0.05);
+  color: #334155;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* ── Light: Overdue card bg ── */
+.light-page .urgency-overdue {
+  background: linear-gradient(135deg, rgba(239,68,68,0.06) 0%, var(--surface) 60%);
+}
+
+/* ── Light: Attachment link ── */
+.light-page .attachment-link {
+  color: #334155;
+}
+.light-page .attachment-link:hover {
+  color: #0f172a;
+}
+
+/* ── Light: Input / select focus rings ── */
+.light-page .filter-group select:focus,
+.light-page .form-group input:focus,
+.light-page .form-group select:focus,
+.light-page .form-group textarea:focus,
+.light-page .admin-input:focus {
+  border-color: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.07);
+}
+
+.light-page .form-group input:hover,
+.light-page .form-group select:hover,
+.light-page .form-group textarea:hover,
+.light-page .admin-input:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* ── Light: File input ── */
+.light-page .file-input:hover {
+  border-color: rgba(0, 0, 0, 0.3) !important;
+  background: rgba(0, 0, 0, 0.02) !important;
+}
+
+/* ── Light: Empty state ── */
+.light-page .no-assignments {
+  background: var(--surface);
+  border: 2px dashed rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* ── Light: Select dropdown arrow ── */
+.light-page .filter-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+}
+
+/* ── Light: Admin panel ── */
+.light-page .admin-panel {
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05);
+}
+
+/* ── Light: Admin tabs ── */
+.light-page .admin-tabs {
+  background: var(--surface-2);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.light-page .active-tab {
+  background: var(--surface);
+  color: #0f172a;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+
+.light-page .admin-tab:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: #0f172a;
+}
+
+/* ── Light: Admin loading/empty ── */
+.light-page .admin-loading,
+.light-page .admin-empty {
+  border: 2px dashed rgba(0, 0, 0, 0.1);
+}
+
+.light-page .admin-cr-item:hover {
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+.light-page .admin-list-header {
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+.light-page .admin-list-header h4 {
+  color: #334155;
+}
+
+.light-page .admin-refresh-btn {
+  background: var(--surface-3);
+  color: #334155;
+}
+.light-page .admin-refresh-btn:hover {
+  background: var(--surface-2);
+}
+
+/* ── Light: Modal overlay ── */
+.light-page .modal-overlay {
+  background: rgba(15, 23, 42, 0.45);
+}
+
+/* ── Light: Selected files box ── */
+.light-page .selected-files {
+  background: rgba(34, 197, 94, 0.06);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+/* ── Light: Primary button — dark instead of purple ── */
+.light-page .liquid-btn-variant-primary {
+  background: rgba(15, 23, 42, 0.12);
+}
+.light-page .liquid-btn-glow-primary {
+  background: linear-gradient(135deg, rgba(51,65,85,0.7) 0%, rgba(30,41,59,0.65) 50%, rgba(71,85,105,0.5) 100%);
+}
+
+/* ── Light: Outline button ── */
+.light-page .liquid-btn-variant-outline {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1.5px solid rgba(0, 0, 0, 0.18);
+}
+.light-page .liquid-btn-glow-outline {
+  background: linear-gradient(135deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.03) 100%);
+}
+.light-page .liquid-btn-text {
+  color: #0f172a;
+  text-shadow: none;
+}
+
+/* ── Light: Secondary button ── */
+.light-page .liquid-btn-variant-secondary {
+  background: rgba(0, 0, 0, 0.06);
+}
+.light-page .liquid-btn-glow-secondary {
+  background: linear-gradient(135deg, rgba(71,85,105,0.45) 0%, rgba(51,65,85,0.4) 60%, rgba(30,41,59,0.3) 100%);
+}
+
+/* ── Light: Inline shadow rings on light bg ── */
+.light-page .liquid-btn-inner-shadow {
+  box-shadow:
+    inset 3px 3px 0.5px -3px rgba(255,255,255,0.9),
+    inset -3px -3px 0.5px -3px rgba(255,255,255,0.85),
+    inset 1px 1px 1px -0.5px rgba(255,255,255,0.6),
+    inset -1px -1px 1px -0.5px rgba(255,255,255,0.6),
+    inset 0 0 8px 4px rgba(255,255,255,0.05),
+    0 0 0 1px rgba(0,0,0,0.1),
+    0 4px 20px rgba(0,0,0,0.1),
+    0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* ── Light: user name color (header has dark bg regardless) ── */
+.light-page .user-name { color: #e2e8f0; }
+.light-page .user-role { color: #94a3b8; }
+
 /* ── Modal ── */
 .modal-overlay {
   position: fixed;
@@ -263,3 +778,4 @@ body {
   font-size: 0.8rem;
   border-radius: 6px;
 }
+

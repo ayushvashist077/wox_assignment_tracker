@@ -1,6 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useAssignments } from "../../hooks/useAssignments";
+import { useAuthContext } from "../../context/AuthContext";
+import { useUserProgress } from "../../hooks/useUserProgress";
 import AssignmentList from "../Assignments/AssignmentList";
 import Button from "../UI/Button";
 import { exportAssignmentsPDF } from "../../utils/pdfExport";
@@ -16,6 +18,13 @@ const fadeUp = {
 
 const StudentDashboard = () => {
   const { assignments, loading } = useAssignments();
+  const { user } = useAuthContext();
+  const { progressMap, toggleProgress } = useUserProgress(user?.uid);
+
+  const completedCount = assignments.filter(
+    (a) => progressMap[a.id] === "Completed"
+  ).length;
+  const pendingCount = assignments.length - completedCount;
 
   return (
     <div className="dashboard">
@@ -44,15 +53,11 @@ const StudentDashboard = () => {
           <span className="stat-label">Total Assignments</span>
         </div>
         <div className="stat-card">
-          <span className="stat-number">
-            {assignments.filter((a) => a.status === "Pending").length}
-          </span>
+          <span className="stat-number">{pendingCount}</span>
           <span className="stat-label">Due Soon</span>
         </div>
         <div className="stat-card">
-          <span className="stat-number">
-            {assignments.filter((a) => a.status === "Completed").length}
-          </span>
+          <span className="stat-number">{completedCount}</span>
           <span className="stat-label">Completed</span>
         </div>
       </motion.div>
@@ -67,9 +72,10 @@ const StudentDashboard = () => {
           assignments={assignments}
           loading={loading}
           isCR={false}
+          userProgressMap={progressMap}
+          onToggleUserProgress={toggleProgress}
           onEdit={() => {}}
           onDelete={() => {}}
-          onToggleStatus={() => {}}
         />
       </motion.div>
     </div>

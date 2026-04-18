@@ -7,9 +7,10 @@ const AssignmentList = ({
   assignments,
   loading,
   isCR,
+  userProgressMap = {},
+  onToggleUserProgress,
   onEdit,
   onDelete,
-  onToggleStatus,
 }) => {
   const [filters, setFilters] = useState({
     subject: "",
@@ -30,9 +31,11 @@ const AssignmentList = ({
       result = result.filter((a) => a.subject === filters.subject);
     }
 
-    // Filter by status
+    // Filter by personal status
     if (filters.status) {
-      result = result.filter((a) => a.status === filters.status);
+      result = result.filter(
+        (a) => (userProgressMap[a.id] || "Pending") === filters.status
+      );
     }
 
     // Sort
@@ -61,7 +64,7 @@ const AssignmentList = ({
     });
 
     return result;
-  }, [assignments, filters]);
+  }, [assignments, filters, userProgressMap]);
 
   if (loading) return <Loader />;
 
@@ -85,9 +88,10 @@ const AssignmentList = ({
               key={assignment.id}
               assignment={assignment}
               isCR={isCR}
+              userStatus={userProgressMap[assignment.id] || "Pending"}
+              onToggleProgress={() => onToggleUserProgress(assignment.id)}
               onEdit={onEdit}
               onDelete={onDelete}
-              onToggleStatus={onToggleStatus}
             />
           ))}
         </div>

@@ -62,9 +62,10 @@
 /* ── Assignment Grid ── */
 .assignment-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
   margin-top: 8px;
+  perspective: 1200px;
 }
 
 /* ── Assignment Card ── */
@@ -468,3 +469,306 @@
   color: var(--text-3);
   font-size: 0.78rem;
 }
+
+/* ═══════════════════════════════════════════════
+   ANIMATED ASSIGNMENT CARD
+   ═══════════════════════════════════════════════ */
+.animated-card {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  border-top: 4px solid transparent;   /* color set via inline style */
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25), 0 6px 24px rgba(0,0,0,0.15);
+  cursor: default;
+  overflow: hidden;
+  perspective: 800px;
+  transition: box-shadow 0.3s ease;
+}
+
+.animated-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.animated-card-inner {
+  padding: 20px 22px 18px;
+  transform: translateZ(20px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Header row ── */
+.ac-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ac-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ac-subject-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.ac-subject {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.ac-urgency {
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* ── Body ── */
+.ac-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-1);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.ac-desc {
+  font-size: 0.82rem;
+  color: var(--text-3);
+  line-height: 1.55;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Links ── */
+.ac-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ac-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 9px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.ac-link:hover {
+  background: var(--surface-3);
+  color: var(--text-1);
+}
+
+/* ── Meta ── */
+.ac-meta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: var(--text-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 12px;
+}
+
+/* ── Footer ── */
+.ac-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.ac-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ac-status-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 100px;
+  letter-spacing: 0.02em;
+}
+
+.ac-status-pending {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.ac-status-completed {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.22);
+}
+
+.ac-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ── View button ── */
+.ac-view-btn {
+  background: none;
+  border: 1.5px solid var(--border);
+  color: var(--text-2);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 11px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.02em;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.ac-view-btn:hover {
+  background: var(--surface-2);
+  border-color: var(--text-3);
+  color: var(--text-1);
+}
+
+/* ── Detail Modal ── */
+.ac-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ac-detail-subject {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 10px;
+  border-left: 3px solid transparent;
+}
+
+.ac-detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ac-detail-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+  margin: 0;
+}
+
+.ac-detail-desc {
+  font-size: 0.88rem;
+  color: var(--text-2);
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.ac-detail-meta {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.ac-detail-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ac-detail-meta-row:last-child {
+  border-bottom: none;
+}
+
+.ac-detail-meta-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ac-detail-meta-value {
+  font-size: 0.85rem;
+  color: var(--text-1);
+  font-weight: 600;
+}
+
+.ac-detail-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Light theme overrides ── */
+.light-page .animated-card {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 6px 24px rgba(0,0,0,0.04);
+}
+
+.light-page .animated-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.light-page .ac-status-pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: #b45309;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.light-page .ac-status-completed {
+  background: rgba(34, 197, 94, 0.08);
+  color: #15803d;
+  border-color: rgba(34, 197, 94, 0.18);
+}
+

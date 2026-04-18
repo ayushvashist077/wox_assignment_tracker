@@ -90,7 +90,6 @@ service cloud.firestore {
       let changed = request.resource.data.diff(resource.data).affectedKeys();
       return request.auth.uid == uid
         && validUserDoc(request.resource.data)
-        && request.auth.token.email_verified == true
         && changed.hasOnly(["emailVerified", "verifiedAt"])
         && request.resource.data.uid == resource.data.uid
         && request.resource.data.name == resource.data.name
@@ -199,13 +198,17 @@ service cloud.firestore {
     }
 
     match /assignments/{assignmentId} {
-      allow get, list: if isApprovedUser() || isSuperAdmin();
+      allow get, list: if true;
       allow create: if (isApprovedCR() || isSuperAdmin())
         && validAssignmentDoc(request.resource.data);
       allow update: if (isApprovedCR() || isSuperAdmin())
         && validAssignmentDoc(request.resource.data)
         && request.resource.data.uploadedDate == resource.data.uploadedDate;
       allow delete: if isApprovedCR() || isSuperAdmin();
+    }
+
+    match /userProgress/{uid}/assignments/{assignmentId} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
     }
 
     match /{document=**} {

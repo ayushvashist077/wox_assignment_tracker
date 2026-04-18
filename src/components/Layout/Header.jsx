@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
 import { logout } from "../../services/authService";
 import Modal from "../UI/Modal";
 import Login from "../Auth/Login";
@@ -8,6 +9,7 @@ import LiquidButton from "../UI/LiquidButton";
 
 const Header = () => {
   const { user, isCRUser } = useAuthContext();
+  const { isDark, toggleTheme } = useTheme();
   const [showLogin, setShowLogin] = useState(false);
 
   const handleLogout = async () => {
@@ -22,6 +24,19 @@ const Header = () => {
       </div>
 
       <div className="header-right">
+        <button
+          className="theme-toggle"
+          onClick={toggleTheme}
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          <span className="theme-toggle-track">
+            <span className="theme-toggle-thumb">
+              {isDark ? "🌙" : "☀️"}
+            </span>
+          </span>
+        </button>
+
         {user ? (
           <div className="user-info">
             <div className="user-avatar-placeholder">

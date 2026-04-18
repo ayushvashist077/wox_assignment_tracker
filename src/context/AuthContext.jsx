@@ -30,10 +30,22 @@ export const AuthProvider = ({ children }) => {
           return;
         }
 
-        // Check email verification
-        setEmailVerified(currentUser.emailVerified);
+        // Reload from Firebase servers so emailVerified is always fresh
+        // (the cached token may be stale after the user clicks the verification link)
+        try {
+          await currentUser.reload();
+          // Force-refresh the ID token so the Firestore token claim
+          // email_verified updates before we try the updateDoc write.
+          await auth.currentUser.getIdToken(true);
+        } catch (_) {
+          // ignore — proceed with cached state if reload fails
+        }
+        const freshUser = auth.currentUser;
 
-        if (!currentUser.emailVerified) {
+        // Check email verification
+        setEmailVerified(freshUser.emailVerified);
+
+        if (!freshUser.emailVerified) {
           setApprovalStatus("unverified");
           setIsCRUser(false);
           setIsAdmin(false);
@@ -42,10 +54,10 @@ export const AuthProvider = ({ children }) => {
         }
 
         // Email is verified — sync to Firestore
-        await updateEmailVerifiedStatus(currentUser.uid);
+        await updateEmailVerifiedStatus(freshUser.uid);
 
         // Check approval status
-        const statusResult = await getUserStatus(currentUser.uid);
+        const statusResult = await getUserStatus(freshUser.uid);
         if (statusResult.success) {
           setApprovalStatus(
             statusResult.status === "not_found" ? "pending" : statusResult.status
@@ -56,13 +68,13 @@ export const AuthProvider = ({ children }) => {
 
         // Only check CR if approved
         if (statusResult.success && statusResult.status === "approved") {
-          const crStatus = await isCR(currentUser.email);
+          const crStatus = await isCR(freshUser.email);
           setIsCRUser(crStatus);
         } else {
           setIsCRUser(false);
         }
 
-        setIsAdmin(isSuperAdmin(currentUser.email));
+        setIsAdmin(isSuperAdmin(freshUser.email));
       } else {
         setIsCRUser(false);
         setIsAdmin(false);
@@ -84,6 +96,9 @@ export const AuthProvider = ({ children }) => {
 
     try {
       await auth.currentUser.reload();
+      // Force-refresh the ID token so Firestore sees email_verified: true
+      // in the token claims before we try the updateDoc write.
+      await auth.currentUser.getIdToken(true);
       const refreshedUser = auth.currentUser;
       setUser({ ...refreshedUser });
 

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ContainerScroll } from "./UI/ContainerScroll";
 import LiquidButton from "./UI/LiquidButton";
 import Modal from "./UI/Modal";
 import Login from "./Auth/Login";
+import { getAssignments } from "../services/assignmentService";
 import "../styles/landing.css";
 
 const mockAssignments = [
@@ -114,8 +115,53 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
 
+const PUBLIC_SUBJECT_COLORS = {
+  Marketing: "#f59e0b",
+  Finance: "#10b981",
+  Operations: "#3b82f6",
+  HRM: "#8b5cf6",
+  Strategy: "#ef4444",
+  Economics: "#06b6d4",
+};
+
+const getPublicSubjectColor = (subject = "") => {
+  const s = subject.toLowerCase();
+  if (s.includes("law") || s.includes("ethics")) return "#f59e0b";
+  if (s.includes("product") || s.includes("experience")) return "#3b82f6";
+  if (s.includes("generative") || s.includes("ai")) return "#8b5cf6";
+  if (s.includes("nlp") || s.includes("customer")) return "#10b981";
+  if (s.includes("numerical") || s.includes("personality")) return "#ec4899";
+  if (s.includes("accounting") || s.includes("financial")) return "#f97316";
+  return PUBLIC_SUBJECT_COLORS[subject] || "#6366f1";
+};
+
+const formatPublicDate = (deadline) => {
+  if (!deadline) return "—";
+  try {
+    const d = deadline?.toDate ? deadline.toDate() : new Date(deadline);
+    return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+  } catch {
+    return String(deadline);
+  }
+};
+
 const Landing = () => {
   const [showLogin, setShowLogin] = useState(false);
+  const [showAssignments, setShowAssignments] = useState(false);
+  const [publicAssignments, setPublicAssignments] = useState([]);
+  const [loadingAssignments, setLoadingAssignments] = useState(false);
+
+  const fetchPublicAssignments = useCallback(async () => {
+    setLoadingAssignments(true);
+    const result = await getAssignments();
+    if (result.success) setPublicAssignments(result.data);
+    setLoadingAssignments(false);
+  }, []);
+
+  const handleOpenAssignments = () => {
+    setShowAssignments(true);
+    fetchPublicAssignments();
+  };
 
   return (
     <div className="landing">
@@ -131,9 +177,14 @@ const Landing = () => {
           <span className="landing-nav-name">Assignment Tracker</span>
           <span className="header-subtitle">MBA BA Dashboard</span>
         </div>
-        <LiquidButton size="sm" onClick={() => setShowLogin(true)}>
-          🔐 Sign In
-        </LiquidButton>
+        <div className="landing-nav-actions">
+          <button className="landing-nav-btn" onClick={handleOpenAssignments}>
+            📋 Assignments
+          </button>
+          <LiquidButton size="sm" onClick={() => setShowLogin(true)}>
+            🔐 Sign In
+          </LiquidButton>
+        </div>
       </nav>
 
       {/* ── Hero ── */}
@@ -286,6 +337,43 @@ const Landing = () => {
       {/* ── Login Modal ── */}
       <Modal isOpen={showLogin} onClose={() => setShowLogin(false)} title={null}>
         <Login onClose={() => setShowLogin(false)} />
+      </Modal>
+
+      {/* ── Public Assignments Modal ── */}
+      <Modal isOpen={showAssignments} onClose={() => setShowAssignments(false)} title="All Assignments">
+        <div className="public-assignments">
+          {loadingAssignments ? (
+            <div className="public-assignments-loading">Loading assignments…</div>
+          ) : publicAssignments.filter((a) => a.status !== "Completed").length === 0 ? (
+            <div className="public-assignments-empty">No pending assignments right now. 🎉</div>
+          ) : (
+            <div className="public-assignments-list">
+              {publicAssignments.filter((a) => a.status !== "Completed").map((a) => {
+                const color = getPublicSubjectColor(a.subject);
+                return (
+                  <div key={a.id} className="pub-card" style={{ borderLeftColor: color }}>
+                    <div className="pub-card-header">
+                      <span className="pub-subject" style={{ background: `${color}22`, color }}>
+                        {a.subject}
+                      </span>
+                    </div>
+                    <p className="pub-title">{a.title}</p>
+                    {a.description && (
+                      <p className="pub-desc">{a.description}</p>
+                    )}
+                    <div className="pub-meta">
+                      <span>📅 {formatPublicDate(a.deadline)}</span>
+                      <span>⬆️ {formatPublicDate(a.uploadedDate)}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <p className="public-assignments-note">
+            Sign in with your Woxsen email to view detils and track your progress.
+          </p>
+        </div>
       </Modal>
     </div>
   );

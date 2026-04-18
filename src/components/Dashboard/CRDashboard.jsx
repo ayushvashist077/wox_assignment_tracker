@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useAssignments } from "../../hooks/useAssignments";
 import { useAuthContext } from "../../context/AuthContext";
+import { useUserProgress } from "../../hooks/useUserProgress";
 import AssignmentForm from "../Assignments/AssignmentForm";
 import AssignmentList from "../Assignments/AssignmentList";
 import AdminPanel from "../Admin/AdminPanel";
@@ -26,10 +27,16 @@ const CRDashboard = () => {
     updateAssignment,
     deleteAssignment,
   } = useAssignments();
-  const { isAdmin } = useAuthContext();
+  const { user, isAdmin } = useAuthContext();
+  const { progressMap, toggleProgress } = useUserProgress(user?.uid);
   const [showForm, setShowForm] = useState(false);
   const [editingAssignment, setEditingAssignment] = useState(null);
   const [showAdmin, setShowAdmin] = useState(false);
+
+  const completedCount = assignments.filter(
+    (a) => progressMap[a.id] === "Completed"
+  ).length;
+  const pendingCount = assignments.length - completedCount;
 
   const handleAdd = async (formData, files) => {
     const result = await addAssignment(formData, files);
@@ -63,10 +70,6 @@ const CRDashboard = () => {
         toast.error("❌ Failed to delete assignment.");
       }
     }
-  };
-
-  const handleToggleStatus = async (id, newStatus) => {
-    await updateAssignment(id, { status: newStatus });
   };
 
   const handleEdit = (assignment) => {
@@ -119,15 +122,11 @@ const CRDashboard = () => {
           <span className="stat-label">Total Assignments</span>
         </div>
         <div className="stat-card">
-          <span className="stat-number">
-            {assignments.filter((a) => a.status === "Pending").length}
-          </span>
+          <span className="stat-number">{pendingCount}</span>
           <span className="stat-label">Due Soon</span>
         </div>
         <div className="stat-card">
-          <span className="stat-number">
-            {assignments.filter((a) => a.status === "Completed").length}
-          </span>
+          <span className="stat-number">{completedCount}</span>
           <span className="stat-label">Completed</span>
         </div>
       </motion.div>
@@ -160,9 +159,10 @@ const CRDashboard = () => {
           assignments={assignments}
           loading={loading}
           isCR={true}
+          userProgressMap={progressMap}
+          onToggleUserProgress={toggleProgress}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          onToggleStatus={handleToggleStatus}
         />
       </motion.div>
     </div>
